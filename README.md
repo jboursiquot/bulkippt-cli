@@ -1,5 +1,8 @@
 # Bulkippt CLI
 
+[![Code
+Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/jboursiquot/bulkippt-cli)
+
 BulkipptCLI offers a command line interface alternative to using the Bulkippt gem (https://github.com/jboursiquot/bulkippt) in your application. If you just need to import your bookmarks from a CSV into your kippt.com account with a single one-liner from your shell, this is your tool.
 
 ## Installation
