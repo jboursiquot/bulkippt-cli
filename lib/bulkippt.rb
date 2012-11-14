@@ -13,8 +13,8 @@ module Bulkippt
     method_option :environment, aliases: '-e', default: 'production', desc: 'Running environment of tool. When set to test, it will not submit to Kippt.com.'
     def submit(csv)
       begin
-        initialize_credentials options
-        initialize_bulkippt options[:environment]
+        initialize_credentials options['username'], options['token']
+        initialize_bulkippt options['environment']
 
         csv_path = File.expand_path(csv, __FILE__)
         raise RuntimeError("File not found: #{csv}") unless File.exists?(csv_path)
@@ -30,16 +30,19 @@ module Bulkippt
 
     private
 
-    def initialize_credentials(options)
-      raise 'Missing username argument' unless options.has_key? 'username'
-      raise 'Missing token argument' unless options.has_key? 'token'
-      @username = options['username']
-      @token = options['token']
+    def initialize_credentials(username, token)
+      raise 'Missing username argument' if username.nil? || username == 'username'
+      raise 'Missing token argument' if token.nil? || token == 'token'
+      @username = username
+      @token = token
+      nil
     end
 
     def initialize_bulkippt(env)
-      kippt = env == 'test' ? Bulkippt::FakeService.new('valid','valid') : Kippt::Client.new(username: @username, token: @token)
+      kippt = env == 'test' ? Bulkippt::FakeService.new(@username, @token) : Kippt::Client.new(username: @username, token: @token)
       @bulkippt = Bulkippt::Loader.new(kippt)
+      raise 'Invalid username and/or token' unless @bulkippt.credentials_valid?
+      nil
     end
 
   end
