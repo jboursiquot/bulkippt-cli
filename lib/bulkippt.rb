@@ -17,7 +17,7 @@ module Bulkippt
         initialize_bulkippt options['environment']
 
         csv_path = File.expand_path(csv, __FILE__)
-        raise RuntimeError("File not found: #{csv}") unless File.exists?(csv_path)
+        raise "File not found: #{csv}" unless File.exists?(csv_path)
 
         bookmarks = @bulkippt.extract_bookmarks csv_path
         submitted = @bulkippt.submit_bookmarks bookmarks

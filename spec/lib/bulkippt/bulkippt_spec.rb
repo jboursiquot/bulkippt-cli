@@ -9,6 +9,7 @@ describe 'Bulkippt CLI' do
     @invalid_token = 'invalid'
     @empty_csv = File.expand_path('../../../data/empty.csv',__FILE__)
     @good_csv = File.expand_path('../../../data/good.csv',__FILE__)
+    @bad_csv = '/does/not/exist'
   end
 
   context 'when invoked without any parameters' do
@@ -56,6 +57,11 @@ describe 'Bulkippt CLI' do
     it 'should respond with an invalid CSV error if the expected columns are not found in the CSV' do
       output = `./bin/bulkippt submit #{@empty_csv} -u #{@username} -t #{@token} -e test 2>&1`
       output.should include "Missing 'url' column"
+    end
+
+    it 'should respond with an invalid CSV error if the CSV cannot be found' do
+      output = `./bin/bulkippt submit #{@bad_csv} -u #{@username} -t #{@token} -e test 2>&1`
+      output.should include "File not found: #{@bad_csv}"
     end
 
   end
